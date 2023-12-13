@@ -4,8 +4,12 @@ const { sequelize } = require("../config/db");
 
 const languages = ['English', 'Hindi'];
 const roles = ['student', 'tutor'];
+const subjects = ['English', 'Hindi', 'Science', 'Math'];
+const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 Object.freeze(languages);
 Object.freeze(roles);
+Object.freeze(subjects);
+Object.freeze(grades);
 
 const UserSchema = sequelize.define('user', {
 
@@ -35,8 +39,33 @@ const UserSchema = sequelize.define('user', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     },
+    isValidated: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+    }
 })
 
+const UserSubjectGradeSchema = sequelize.define('user_subject_grade', {
+
+    email: {
+        type: DataTypes.STRING,
+        references: {
+            model: UserSchema,
+            key: 'email'
+        }
+    },
+    subject: {
+        type: DataTypes.STRING,
+        enum: subjects,
+        allowNull: true
+    },
+    grade: {
+        type: DataTypes.STRING,
+        enum: grades,
+        allowNull: false
+    }
+})
 
 class User {
 
@@ -46,6 +75,7 @@ class User {
     #role;
     #language;
     #lastActive;
+    #isValidated;
 
     get name() {
         return this.#name;
@@ -69,6 +99,10 @@ class User {
 
     get lastActive() {
         return this.#lastActive;
+    }
+
+    get isValidated() {
+        return this.#isValidated;
     }
 
     set name(name) {
@@ -95,8 +129,40 @@ class User {
         this.#lastActive = lastActive;
     }
 
+    set isValidated(isValidated) {
+        this.#isValidated = isValidated;
+    }
+}
+
+class Student extends User {
+    
+    #grade;
+
+    get grade() {
+        return this.#grade;
+    }
+
+    set grade(grade) {
+        this.#grade = grade;
+    }
+}
+
+class Tutor extends User {
+    
+    /**
+     * @type {Map<number, string[]>}
+     */
+    #assignedGradesSubjects = new Map();
+
+    get assignedGradesSubjects() {
+        return this.#assignedGradesSubjects;
+    }
+
+    set assignedGradesSubjects(assignedGradesSubjects) {
+        this.#assignedGradesSubjects = assignedGradesSubjects;
+    }
 }
 
 module.exports = {
-    UserSchema, User, languages, roles
+    UserSchema, User, languages, roles, UserSubjectGradeSchema, subjects, grades, Tutor, Student
 }

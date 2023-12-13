@@ -1,8 +1,8 @@
 
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { isNameValid, isEmailValid, isPasswordValid, isLanguageValid } = require('../service/validation.service');
-const { User } = require('../model/user.model');
+const { isNameValid, isEmailValid, isPasswordValid, isLanguageValid, isGradeValid, isAssignedGradesSubjectsValid } = require('../service/validation.service');
+const { User, Student, Tutor } = require('../model/user.model');
 const { registerNewUser, getUser } = require('../service/user.service');
 const { ResourceExistsError } = require('../error/resource.exists.error');
 const { createToken } = require('../service/jwt.service');
@@ -11,7 +11,21 @@ const userRouter = express.Router();
 
 const createUser = async (req, res, role) => {
 
-    const { name, email, password, language } = req.body;
+    const { name, email, password, language, grade, assigned } = req.body;
+
+    if (role == 'student' && (Array.isArray(grade) || !isGradeValid(grade))) {
+        return res.status(400).send({
+            success: false,
+            message: 'Student must provide only one grade'
+        })
+    }
+
+    if (role == 'tutor' && (!assigned || !isAssignedGradesSubjectsValid(assigned))) {
+        return res.status(400).send({
+            success: false,
+            message: 'Tutor must provide both assigned grades and subjects'
+        })
+    }
 
     if (!isNameValid(name) || !isEmailValid(email) || !isPasswordValid(password) || !isLanguageValid(language)) {
 
@@ -21,14 +35,28 @@ const createUser = async (req, res, role) => {
         });
     }
 
+
     // create user object for storing in db
 
-    let newuser = new User();
+    let newuser = role == 'student' ? new Student() : new Tutor();
     newuser.email = email;
     newuser.name = name;
     newuser.password = password;
     newuser.language = language;
     newuser.role = role;
+
+    if (role == 'student') {
+        newuser.grade = grade;
+    }
+    else if (role == 'tutor') {
+
+        let m = new Map();
+
+        for (let grade in assigned) {
+            m.set(grade, assigned[grade]);
+        }
+        newuser.assignedGradesSubjects = m;
+    }
 
     try {
         newuser = await registerNewUser(newuser);
@@ -80,10 +108,10 @@ userRouter.post('/login', async (req, res) => {
 
     const user = await getUser(email);
 
-    if (!user) {
+    if (!user || !user.isValidated) {
         return res.status(404).send({
             success: false,
-            message: 'User not found'
+            message: 'User not found or User not validated'
         });
     }
 

@@ -1,4 +1,4 @@
-const { languages } = require("../model/user.model");
+const { languages, grades, subjects } = require("../model/user.model");
 
 const isNameValid = (name) => {
 
@@ -22,10 +22,44 @@ const isLanguageValid = (language) => {
     return languages.includes(language);
 }
 
+const isGradeValid = (grade) => {
+
+    return grades.includes(+grade);
+}
+
+
+const isSubjectValid = (subject) => {
+
+    return subjects.includes(subject);
+}
+
+const isAssignedGradesSubjectsValid = (ags) => {
+
+    if (typeof ags !== 'object') {
+        return false;
+    }
+
+    for (let grade in ags) {
+        if (!isGradeValid(grade)) {
+            return false;
+        }
+        for (let sub of ags[grade]) {
+            if (!subjects.includes(sub)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 
 module.exports = {
     isNameValid,
     isEmailValid,
     isPasswordValid,
-    isLanguageValid
+    isLanguageValid,
+    isGradeValid,
+    isSubjectValid,
+    isAssignedGradesSubjectsValid
 }

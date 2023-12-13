@@ -11,10 +11,22 @@ const { User } = require('../model/user.model');
 
 const createToken = (user) => {
 
-    return jwt.sign({
+    let options = {
         email: user.email,
-        role: user.role
-    }, process.env.JWT_SECRET, {
+        role: user.role,
+        language: user.language,
+        lastActive: user.lastActive,
+        isValidated: user.isValidated,
+    }
+
+    if (user.role == 'student') {
+        options.grade = user.grade;
+    }
+    else if (user.role == 'tutor') {
+        options.assignedGradesSubjects = Object.fromEntries(user.assignedGradesSubjects);
+    }
+
+    return jwt.sign(options, process.env.JWT_SECRET, {
         expiresIn: '1d'
     });
 }
@@ -34,6 +46,17 @@ const verifyToken = (token) => {
 
         newuser.email = decoded.email;
         newuser.role = decoded.role;
+        newuser.language = decoded.language;
+        newuser.lastActive = decoded.lastActive;
+        newuser.isValidated = decoded.isValidated;
+
+        if (decoded.role == 'student') {
+            newuser.grade = decoded.grade;
+        }
+        else if (decoded.role == 'tutor') {
+            newuser.assignedGradesSubjects = new Map(Object.entries(decoded.assignedGradesSubjects));
+        }
+
         return newuser;
 
     } catch (error) {

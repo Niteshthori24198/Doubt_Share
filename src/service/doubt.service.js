@@ -2,7 +2,7 @@
 const { ResourceAbsentError } = require("../error/resource.absent.error");
 const { UserValidationError } = require("../error/user.validation.error");
 const { Doubt, DoubtSchema } = require("../model/doubt.model");
-const { UserSchema } = require("../model/user.model");
+const { UserSchema, User, UserSubjectGradeSchema } = require("../model/user.model");
 const { IllegalRequestError } = require("../error/illegal.request.error");
 
 
@@ -55,26 +55,27 @@ const createDoubt = async (doubt, studentEmail) => {
 /**
  * @param {number} doubtId
  * @param {string} tutorEmail
- * @return {Promise<Doubt>}
  */
 
-const assignedDoubt = async (doubtId, tutorEmail) => {
+const assignedDoubt = async (doubtId, tutorEmail, checkValidity = true) => {
 
-    let d = await DoubtSchema.findByPk(doubtId);
+    if (checkValidity) {
 
-    if (!d) {
-        throw new ResourceAbsentError('Invalid Doubt id detected')
+        let d = await DoubtSchema.findByPk(doubtId);
+        if (!d) {
+            throw new ResourceAbsentError('Invalid Doubt id detected')
+        }
+
+        let t = await UserSchema.findByPk(tutorEmail);
+
+        if (!t || t.role != 'tutor') {
+            throw new ResourceAbsentError('Invalid Tutor email')
+        }
+
+        // if(!t.isValidated) {
+        //     throw new UserValidationError("Tutor not validated");
+        // }
     }
-
-    let t = await UserSchema.findByPk(tutorEmail);
-
-    if (!t || t.role != 'tutor') {
-        throw new ResourceAbsentError('Invalid Tutor email')
-    }
-
-    // if(!t.isValidated) {
-    //     throw new UserValidationError("Tutor not validated");
-    // }
 
     await DoubtSchema.update({
         tutorEmail: tutorEmail
@@ -83,16 +84,12 @@ const assignedDoubt = async (doubtId, tutorEmail) => {
             id: doubtId
         }
     })
-
-    d.tutorEmail = tutorEmail;
-    d = doubtSchemaToDoubt(d);
-    return d;
-
 }
 
 /**
  * @param {number} doubtId
  * @param {string} solution
+ * @return {Promise<Doubt>}
  */
 
 const handleDoubt = async (doubtId, solution, tutorEmail) => {
@@ -171,10 +168,63 @@ const getAllDoubts = async (email) => {
     return doubts;
 }
 
+/**
+ * @param {Map<string,object>} pingedUsers
+ */
+
+const doubtAssignmentScheduler = async (pingedUsers) => {
+
+    let ds = await DoubtSchema.findAll({
+        where: {
+            tutorEmail: null,
+            doubtSolution: null
+        }
+    })
+
+    let activeTutors = [];
+    for (let e of pingedUsers.entries()) {
+        if (e[1].role == 'student' || !e[1].isValidated) continue;
+        activeTutors.push(e[1]);
+    }
+
+    let m = new Map();
+    let ats, s, usg;
+
+    for (let d of ds) {
+
+        if (!m.has(d.studentEmail)) {
+
+            s = await UserSchema.findByPk(d.studentEmail);
+            usg = await UserSubjectGradeSchema.findOne({
+                where: {
+                    email: d.studentEmail
+                }
+            });
+            ats = activeTutors.filter((t) => {
+                return t.language == s.language && t.assignedGradesSubjects.has(usg.grade);
+            })
+
+            m.set(d.studentEmail, ats);
+        } else {
+            ats = m.get(d.studentEmail);
+        }
+
+        ats = ats.filter((t) => {
+            return t.assignedGradesSubjects.get(usg.grade).includes(d.doubtSubject);
+        })
+
+        if (ats.length) {
+            await assignedDoubt(d.id, ats[0].email, false);
+        }
+    }
+}
+
+
 
 module.exports = {
     createDoubt,
     assignedDoubt,
     handleDoubt,
-    getAllDoubts
+    getAllDoubts,
+    doubtAssignmentScheduler
 }

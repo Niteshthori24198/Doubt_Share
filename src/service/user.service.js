@@ -1,3 +1,4 @@
+
 const { ResourceExistsError } = require("../error/resource.exists.error");
 const { User, UserSchema, UserSubjectGradeSchema, Student, Tutor } = require("../model/user.model");
 const bcrypt = require("bcrypt");
@@ -104,6 +105,7 @@ const getUser = async (email) => {
 
     return null;
 }
+
 
 
 module.exports = { registerNewUser, getUser }

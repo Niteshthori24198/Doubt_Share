@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bcrypt = require('bcrypt');
 const { isNameValid, isEmailValid, isPasswordValid, isLanguageValid, isGradeValid, isAssignedGradesSubjectsValid } = require('../service/validation.service');
@@ -7,7 +6,9 @@ const { registerNewUser, getUser } = require('../service/user.service');
 const { ResourceExistsError } = require('../error/resource.exists.error');
 const { createToken } = require('../service/jwt.service');
 const userRouter = express.Router();
-
+const { auth } = require('../middleware/auth');
+const { pingedUsers } = require('../singleton/singleton');
+const { doubtAssignmentScheduler } = require('../service/doubt.service');
 
 const createUser = async (req, res, role) => {
 
@@ -127,6 +128,15 @@ userRouter.post('/login', async (req, res) => {
         token: createToken(user),
     })
 
+})
+
+
+userRouter.get("/active", auth, async (req, res) => {
+
+    const user = req.body._user;
+    user._lastpingedtime = Date.now();
+
+    pingedUsers.set(user.email, user);
 })
 
 module.exports = userRouter;

@@ -31,7 +31,7 @@ const registerNewUser = async (user) => {
         role: user.role,
         language: user.language,
         lastActive: Date.now(),
-        isValidated: false
+        isValidated: true
     })
 
     if (user.constructor === Student) {

@@ -35,9 +35,9 @@ const createDoubt = async (doubt, studentEmail) => {
         throw new ResourceAbsentError("Student not found");
     }
 
-    // if(!user.isValidated) {
-    //     throw new UserValidationError("Student not validated");
-    // }
+    if(!user.isValidated) {
+        throw new UserValidationError("Student not validated");
+    }
 
     let newdoubt = await DoubtSchema.create({
         studentEmail: studentEmail,
@@ -72,9 +72,9 @@ const assignedDoubt = async (doubtId, tutorEmail, checkValidity = true) => {
             throw new ResourceAbsentError('Invalid Tutor email')
         }
 
-        // if(!t.isValidated) {
-        //     throw new UserValidationError("Tutor not validated");
-        // }
+        if(!t.isValidated) {
+            throw new UserValidationError("Tutor not validated");
+        }
     }
 
     await DoubtSchema.update({
@@ -106,15 +106,15 @@ const handleDoubt = async (doubtId, solution, tutorEmail) => {
         throw new ResourceAbsentError('Invalid Tutor email')
     }
 
-    // if(!t.isValidated) {
-    //     throw new UserValidationError("Tutor not validated");
-    // }
+    if(!t.isValidated) {
+        throw new UserValidationError("Tutor not validated");
+    }
 
     if (d.tutorEmail != tutorEmail) {
         throw new IllegalRequestError('Doubt not assigned to you')
     }
 
-    d = await DoubtSchema.update({
+    await DoubtSchema.update({
         doubtSolution: solution
     }, {
         where: {
@@ -122,6 +122,7 @@ const handleDoubt = async (doubtId, solution, tutorEmail) => {
         }
     })
 
+    d.doubtSolution = solution;
     d = doubtSchemaToDoubt(d);
     return d;
 }
@@ -140,9 +141,9 @@ const getAllDoubts = async (email) => {
         throw new ResourceAbsentError("User not found");
     }
 
-    // if(!user.isValidated) {
-    //     throw new UserValidationError("Student not validated");
-    // }
+    if(!user.isValidated) {
+        throw new UserValidationError("Student not validated");
+    }
 
     let doubts = [];
 

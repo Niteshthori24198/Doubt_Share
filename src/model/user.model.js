@@ -4,7 +4,7 @@ const { sequelize } = require("../config/db");
 
 const languages = ['English', 'Hindi'];
 const roles = ['student', 'tutor'];
-const subjects = ['English', 'Hindi', 'Science', 'Math'];
+const subjects = ['English', 'Hindi', 'Science', 'Maths'];
 const grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 Object.freeze(languages);
 Object.freeze(roles);
@@ -135,7 +135,7 @@ class User {
 }
 
 class Student extends User {
-    
+
     #grade;
 
     get grade() {
@@ -148,7 +148,7 @@ class Student extends User {
 }
 
 class Tutor extends User {
-    
+
     /**
      * @type {Map<number, string[]>}
      */

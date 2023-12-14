@@ -8,7 +8,6 @@ const { createToken } = require('../service/jwt.service');
 const userRouter = express.Router();
 const { auth } = require('../middleware/auth');
 const { pingedUsers } = require('../singleton/singleton');
-const { doubtAssignmentScheduler } = require('../service/doubt.service');
 
 const createUser = async (req, res, role) => {
 

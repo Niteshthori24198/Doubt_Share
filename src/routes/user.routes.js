@@ -125,8 +125,21 @@ userRouter.post('/login', async (req, res) => {
     return res.status(200).send({
         success: true,
         token: createToken(user),
+        role:user.role
     })
 
+})
+
+
+userRouter.post("/logout", auth, async (req, res) => {
+
+    const user = req.body._user;
+    
+    pingedUsers.delete(user.email);
+
+    return res.status(200).send({
+        success: true
+    })
 })
 
 
@@ -136,6 +149,10 @@ userRouter.get("/active", auth, async (req, res) => {
     user._lastpingedtime = Date.now();
 
     pingedUsers.set(user.email, user);
+
+    return res.status(200).send({
+        success: true
+    })
 })
 
 module.exports = userRouter;

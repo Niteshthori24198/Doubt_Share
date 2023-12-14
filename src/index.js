@@ -42,9 +42,10 @@ sequelize.sync().then(() => {
 
 cron.schedule('* * * * * *', async () => {
 
-    for (let user of pingedUsers) {
-        if ((Date.now() - user._lastpingedtime) > 3000) {
-            pingedUsers.delete(user);
+    for (let e of pingedUsers) {
+        console.log(e)
+        if ((Date.now() - e[1]._lastpingedtime) > 3000) {
+            pingedUsers.delete(e[0]);
         }
     }
     doubtAssignmentScheduler(pingedUsers);

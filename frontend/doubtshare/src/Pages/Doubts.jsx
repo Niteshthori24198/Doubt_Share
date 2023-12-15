@@ -7,6 +7,8 @@ function Doubts() {
 
     const [doubts, setDoubts] = React.useState([]);
 
+    const [isresolved, setIsResolved] = React.useState(false);
+
     const { userRole } = React.useContext(appContext);
 
     const [solution, setSolution] = React.useState('');
@@ -20,7 +22,7 @@ function Doubts() {
             console.log(err)
         })
 
-    }, [])
+    }, [isresolved])
 
 
     const handleDoubtSolution = (doubtId) => {
@@ -38,7 +40,9 @@ function Doubts() {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }).then((res) => {
-                console.log(res.data)
+                console.log(res.data);
+                setIsResolved(!isresolved);
+                alert('Solution added Successfully.');
             }).catch((err) => {
                 console.log(err)
             })

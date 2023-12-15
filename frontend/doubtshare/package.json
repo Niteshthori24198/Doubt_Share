@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "npx serve build -s -n -L -p 443"
+    "start": "npx serve build -s -n -L -p 3000"
   },
   "eslintConfig": {
     "extends": [

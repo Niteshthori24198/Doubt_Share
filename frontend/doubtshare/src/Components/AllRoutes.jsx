@@ -16,12 +16,12 @@ export default function AllRoutes() {
             <Route path='/' element={<Home />} />
             <Route path='/Home' element={<Home />} />
             <Route path='/Add-user' element={<Register />} />
-            <Route path='/Create-doubt' element={<CreateDoubt />} />
+            <Route path='/Create-doubt' element={<PrivateRoute><CreateDoubt /></PrivateRoute>} />
             <Route path='/Login' element={<Login />} />
             <Route path='/Logout' element={<Logout />} />
             <Route path='/Doubts' element={
-                <Doubts />
-           } />
+                <PrivateRoute><Doubts /></PrivateRoute>
+            } />
 
 
         </Routes>

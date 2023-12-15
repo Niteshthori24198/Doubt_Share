@@ -19,6 +19,7 @@
     "react-scripts": "5.0.1",
     "redux": "^5.0.0",
     "redux-thunk": "^3.1.0",
+    "serve": "^14.2.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -26,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "node index.js"
+    "start": "npx serve build -s -n -L -p 443"
   },
   "eslintConfig": {
     "extends": [

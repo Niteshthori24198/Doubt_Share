@@ -1,3 +1,4 @@
+import '../Styles/doubts.css'
 import axios from 'axios';
 import React from 'react';
 import { appContext } from '../AuthContext/AuthContextProvider';
@@ -55,7 +56,7 @@ function Doubts() {
     }
 
     return <>
-        <table>
+        <table id="doubtpagetable">
             <thead>
                 <th>S.No</th>
                 <th>Student-Email</th>
@@ -77,7 +78,7 @@ function Doubts() {
                             <td>{e.doubtSubject}</td>
                             <td>{e.doubtDescription ? e.doubtDescription : "-"}</td>
                             <td>{e.doubtSolution ? e.doubtSolution : "-"}</td>
-                            {userRole === 'tutor' && <td><button onClick={() => handleDoubtSolution(e.id)}>Add Solution</button></td>}
+                            {userRole === 'tutor' && <td><button className='doubtsolutionbutton' onClick={() => handleDoubtSolution(e.id)}>Add Solution</button></td>}
                         </tr>
                     )
                 })}
@@ -86,12 +87,14 @@ function Doubts() {
         </table>
 
         <form id='myForm' onSubmit={handlesubmit} style={{ display: 'none' }}>
-            <textarea value={solution} name="solution" cols="12" rows="5" onChange={(e) => setSolution(e.target.value)}></textarea>
-            <button onClick={(e) => {
-                e.preventDefault();
-                closeForm()
-            }}>Close</button>
-            <input type='submit' value='Submit' />
+            <textarea placeholder='Add solution here' value={solution} name="solution" cols="12" rows="5" onChange={(e) => setSolution(e.target.value)}></textarea>
+            <div>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    closeForm()
+                }}>Close</button>
+                <input type='submit' value='Submit' />
+            </div>
         </form>
 
     </>

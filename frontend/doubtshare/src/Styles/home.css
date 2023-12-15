@@ -1,0 +1,8 @@
+#homepageimg{
+    width: 100%;
+    margin: 50px auto;
+    border-radius: 15px;
+    display: block;
+    height: 80vh;
+    object-fit: contain;
+}

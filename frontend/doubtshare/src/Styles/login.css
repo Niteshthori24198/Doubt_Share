@@ -1,0 +1,40 @@
+.loginpageform {
+    display: grid;
+    place-items: center;
+    width: 30%;
+    margin: 100px auto;
+    padding: 25px 0px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+#userlogindata1 {
+    width: 80%;
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+}
+#userlogindata2 {
+    width: 80%;
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+}
+
+.loginpageform >button{
+    width: 40%;
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}

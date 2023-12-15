@@ -1,3 +1,4 @@
+import '../Styles/register.css'
 import React from 'react'
 import axios from 'axios'
 
@@ -83,7 +84,6 @@ function Register() {
         if (state.grade) {
             !hack && registerUser(state, 'student');
             !hack && dispatch({ type: 'reset' });
-            
         } else {
 
             delete state.grade;
@@ -106,8 +106,8 @@ function Register() {
 
     return (
 
-        <div>
-
+        <div className="registersection">
+            <h2>Register Here</h2>
             <form onSubmit={handleSubmit}>
 
                 <div>
@@ -155,7 +155,7 @@ function Register() {
                     show && <Tutor />
                 }
 
-                <input type="submit" value="Register" />
+                <input type="submit" value="Register" id="userregisterbtn" />
 
             </form>
 
@@ -216,14 +216,19 @@ function Tutor() {
             <option value="10">10</option>
         </select>
 
-        <label>Hindi</label>
-        <input type="checkbox" className='resetcheckbox' name="Hindi" onChange={(e) => handlechange("Hindi", e.target.checked)} />
-        <label>English</label>
-        <input type="checkbox" className='resetcheckbox' name="English" onChange={(e) => handlechange("English", e.target.checked)} />
-        <label>Maths</label>
-        <input type="checkbox" className='resetcheckbox' name="Maths" onChange={(e) => handlechange("Maths", e.target.checked)} />
-        <label>Science</label>
-        <input type="checkbox" className='resetcheckbox' name="Science" onChange={(e) => handlechange("Science", e.target.checked)} />
+        <div style={{ width: "100%" }}></div>
+
+        <div>
+
+            <label>Hindi</label>
+            <input type="checkbox" className='resetcheckbox' name="Hindi" onChange={(e) => handlechange("Hindi", e.target.checked)} />
+            <label>English</label>
+            <input type="checkbox" className='resetcheckbox' name="English" onChange={(e) => handlechange("English", e.target.checked)} />
+            <label>Maths</label>
+            <input type="checkbox" className='resetcheckbox' name="Maths" onChange={(e) => handlechange("Maths", e.target.checked)} />
+            <label>Science</label>
+            <input type="checkbox" className='resetcheckbox' name="Science" onChange={(e) => handlechange("Science", e.target.checked)} />
+        </div>
 
         <button onClick={handleclick}>Add Preference</button>
 
@@ -240,7 +245,7 @@ function registerUser(user, role) {
         data: user
     }).then((res) => {
         console.log(res.data);
-        alert('Registration Done Successfully')
+        alert('User Registration Done Successfully');
     }).catch((err) => {
         console.log(err)
     })
@@ -249,20 +254,22 @@ function registerUser(user, role) {
 
 function ShowPreferences() {
 
-    document.getElementById('preferences').innerHTML = `<table>
+    document.getElementById('preferences').innerHTML = `<table id="preferencetable">
             <thead>
                 <th>Grade</th>
                 <th>Subject</th>
+                <th>Review Preference</th>
+
             </thead>
             <tbody>
                 ${Object.entries(assignGradeSubject).map((e) => {
-                    return `<tr>
+                        return `<tr>
                                 <td>${e[0]}</td>
                                 <td>${e[1].join(',')}</td>
                                 <td><button class="removebtn" id="${e[0]}">Remove</button></td>
                             </tr > `
                         }).join('')
-                    }
+                            }
             </tbody>
         </table>`
 

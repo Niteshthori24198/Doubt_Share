@@ -1,0 +1,40 @@
+.createdoubtform {
+    display: grid;
+    place-items: center;
+    width: 30%;
+    margin: 100px auto;
+    padding: 10px 0px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.createdoubtform>select {
+    width: 70%;
+    height: 40px;
+    margin: 15px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+}
+
+.createdoubtform>textarea {
+    width: 70%;
+    height: 70px;
+    margin: 15px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+}
+
+.createdoubtform>button {
+    width: 40%;
+    height: 40px;
+    margin: 15px auto 10px auto;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}

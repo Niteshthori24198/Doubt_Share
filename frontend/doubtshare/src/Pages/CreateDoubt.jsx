@@ -1,4 +1,4 @@
-
+import '../Styles/createdoubt.css'
 import React from 'react'
 import axios from 'axios';
 
@@ -34,7 +34,8 @@ function CreateDoubt() {
     return (
 
         <div>
-            <form onSubmit={handlesubmit}>
+            <form onSubmit={handlesubmit} className='createdoubtform'>
+                <h3>Create Doubt</h3>
                 <select name="subject" id="selsubjectval" value={doubtInfo.doubtSubject} onChange={(e) => setDoubtInfo({ ...doubtInfo, doubtSubject: e.target.value })} required>
                     <option value="">Select Subject</option>
                     <option value="Hindi">Hindi</option>
@@ -43,7 +44,7 @@ function CreateDoubt() {
                     <option value="Science">Science</option>
                 </select>
 
-                <textarea name="doubt" id="doubtdesc" cols="20" rows="5" value={doubtInfo.doubtDescription} onChange={(e) => setDoubtInfo({ ...doubtInfo, doubtDescription: e.target.value })}></textarea>
+                <textarea placeholder='enter more description about the problem here' name="doubt" id="doubtdesc" cols="20" rows="5" value={doubtInfo.doubtDescription} onChange={(e) => setDoubtInfo({ ...doubtInfo, doubtDescription: e.target.value })}></textarea>
 
                 <button type='submit'>Create Doubt</button>
             </form>

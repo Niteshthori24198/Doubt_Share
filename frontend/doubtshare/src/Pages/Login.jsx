@@ -1,3 +1,4 @@
+import  '../Styles/login.css'
 import axios from 'axios'
 import React, { useContext } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
@@ -66,9 +67,10 @@ function Login() {
         <>
             {
                 isAuth ? < Navigate to={'/'} /> :
-                    < form onSubmit={handleloginsubmit}>
-                        <input type="text" placeholder='email' value={email} onChange={(e) => dispatch({ type: 'email', payload: e.target.value })} />
-                        <input type="password" placeholder='password' value={password} onChange={(e) => dispatch({ type: 'pass', payload: e.target.value })} />
+                    < form onSubmit={handleloginsubmit} className="loginpageform">
+                        <h3>Login Here</h3>
+                        <input id="userlogindata1" type="text" placeholder='email' value={email} onChange={(e) => dispatch({ type: 'email', payload: e.target.value })} />
+                        <input id="userlogindata2" type="password" placeholder='password' value={password} onChange={(e) => dispatch({ type: 'pass', payload: e.target.value })} />
                         <button type='submit'>Login</button>
                     </form >
             }

@@ -1,0 +1,67 @@
+#doubtpagetable {
+    width: 90%;
+    margin: 80px auto;
+    border: 1px solid black;
+    text-align: center;
+}
+
+#doubtpagetable>thead {
+    background-color: gray;
+    width: 100%;
+}
+
+#doubtpagetable>tbody td {
+    border: 1px solid black;
+}
+
+.doubtsolutionbutton {
+    width: 80%;
+    height: 25px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+#myForm {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 25%;
+    margin: 50px auto;
+    height: 20vh;
+    padding: 20px;
+}
+
+#myForm>textarea {
+    width: 100%;
+    display: block;
+}
+
+#myForm>div:nth-child(2) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+#myForm>div:nth-child(2)>button,
+#myForm>div:nth-child(2)>button>input {
+    width: 40%;
+    height: 25px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
